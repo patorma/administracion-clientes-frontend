@@ -1,1 +1,109 @@
-<p>form-cliente works!</p>
+<ul class="alert alert-danger" *ngIf="errores.length > 0">
+  <li *ngFor="let err of errores">
+      {{ err }}
+  </li>
+</ul>
+
+<div class="card my-4 bg-dark text-white">
+  <div class="card-header">{{ titulo }}</div>
+  <div class="card-body">
+    <form #clienteForm="ngForm">
+      <div class="form-group row">
+        <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" #nombre="ngModel" />
+            <!-- required minlength="4" -->
+            <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                <!--este div es el principal que pregunta si hay error-->
+                <div *ngIf="nombre.errors?.['required']">
+                    Nombre es requerido
+                </div>
+                <div *ngIf="nombre.errors?.['minlength']">
+                    Nombre debe tener 3 caracteres como minimo
+                </div>
+                <div *ngIf="nombre.errors?.['maxlength']">
+                  Nombre debe tener  60 caracteres como máximo
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+      <label for="apellido" class="col-form-label col-sm-2">Apellido</label>
+      <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido" #apellido="ngModel" />
+          <!-- required-->
+          <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+              <!--este div es el principal que pregunta si hay error-->
+              <div *ngIf="apellido.errors?.['required']">
+                  Apellido es requerido por favor
+              </div>
+              <div *ngIf="apellido.errors?.['minlength']">
+                Apellido debe tener 3 caracteres como minimo
+            </div>
+            <div *ngIf="apellido.errors?.['maxlength']">
+              Apellido debe tener 60 caracteres como máximo
+            </div>
+          </div>
+      </div>
+  </div>
+  <div class="form-group row">
+    <label for="email" class="col-form-label col-sm-2">Email</label>
+    <div class="col-sm-6">
+        <input type="email" class="form-control" [(ngModel)]="cliente.email" name="email" #email="ngModel" />
+        <!-- required email-->
+        <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <!--este div es el principal que pregunta si hay error-->
+            <div *ngIf="email.errors?.['required']">
+                Email es requerido
+            </div>
+            <div *ngIf="email.errors?.['email']">
+                Email debe tener un formato válido
+            </div>
+        </div>
+    </div>
+    </div>
+     <div class="form-group row">
+        <label for="telefono" class="col-form-label col-sm-2" >Telefono </label>
+        <div class="col-sm-6">
+           <input type="number" name="telefono" class="form-control" [(ngModel)]="cliente.telefono" #telefono="ngModel">
+           <div class="alert alert-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
+            <!--este div es el principal que pregunta si hay error-->
+            <div *ngIf="telefono.errors?.['required']">
+                Telefono es requerido
+            </div>
+        </div>
+        </div>
+     </div>
+  <div class="form-group row fecha1">
+        <label for="fechaNacimiento" class="col-form-label col-sm-2 father2">Fecha de nacimiento</label>
+        <input [matDatepicker]="miDatepicker" class="form-control fecha" [(ngModel)]="cliente.fechaNacimiento" name="fechaNacimiento" style="display: inline; width: 300px" />
+        <mat-datepicker-toggle [for]="miDatepicker" class="mat"></mat-datepicker-toggle>
+        <mat-datepicker #miDatepicker></mat-datepicker>
+      </div>
+      <!--Acá se ingresa el tipo de gasto y se valida el valor ingresado-->
+      <div class="form-group row">
+        <label for="ciudad" class="col-form-label col-sm-2">Ciudad</label>
+        <div class="col-sm-6">
+            <select [compareWith]="compararCiudad" class="form-control" [(ngModel)]="cliente.ciudad" name="ciudad" style="width: 500px;">
+             <option [ngValue]="undefined">--- seleccionar una ciudad ---</option>
+                <!-- se esta pasando por valor en el ngValue la instancia del objeto region en cada iteracion y despues en nombre en {{}} -->
+                <option *ngFor="let ciudad of ciudades" [ngValue]="ciudad">{{ciudad.nombreCiudad}}</option>
+            </select>
+        </div>
+    </div>
+      <!--Acá se ingresa la fecha-->
+
+     <!--aca van los botones de crear o modificar dependiendo-->
+     <div class="col-sm-6">
+      <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!cliente.id; else elseBlock" [disabled]="!clienteForm.form.valid">
+        Crear
+      </button>
+      <ng-template #elseBlock>
+        <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!clienteForm.form.valid">
+          Editar
+        </button>
+      </ng-template>
+     </div>
+    </form>
+  </div>
+</div>

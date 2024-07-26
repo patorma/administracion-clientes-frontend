@@ -34,7 +34,7 @@ export class ClientesService {
 
   getClientesById(id: number):Observable<Cliente>{
     return this.http
-                    .get<Cliente>(`${this.apiUrl}/cliente/${id}`)
+                    .get<Cliente>(`${this.apiUrl}cliente/${id}`)
                     .pipe(
                       catchError((e) => {
                         if(e.status != 401 && e.error.mensaje){
@@ -99,6 +99,7 @@ export class ClientesService {
   getCiudades(): Observable<Ciudad[]>{
     return this.http.get<Ciudad[]>(`${this.apiUrl}clientes/ciudades`).pipe(
       catchError((e)=>{
+        console.error('Error al obtener ciudades', e);
         return throwError(()=>e);
       })
     )
