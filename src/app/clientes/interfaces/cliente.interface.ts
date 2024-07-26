@@ -6,7 +6,7 @@ export interface Cliente {
   apellido:        string;
   email:           string;
   telefono:        number;
-  fechaNacimiento: Date;
+  fechaNacimiento: string;
   ciudad:          Ciudad;
 }
 
